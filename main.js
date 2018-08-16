@@ -15,14 +15,12 @@ function Game(ui) {
 		this.ui = ui;
 		this.apple = this.generateApple();
 		this.snake = new Snake(); //the snake
-		let pos= this.ui.createNewPosition();
-		this.snake.x = pos.x;
-		this.snake.y = pos.y;
+
+		let dimensions = this.ui.getBoardDimensions();
+		this.snake.x = (dimensions.left+dimensions.right)/2;
+		this.snake.y = (dimensions.bottom)/2;
 }
 
-Game.prototype.start= function() {
-	 	
-}
 
 
 Game.prototype.generateApple= function() {
@@ -199,7 +197,11 @@ UI.prototype.getRandomBorderEmoji = function (){
 
 //all html related
 UI.prototype.draw = function (gameToDraw){
-	console.log( gameToDraw.snake.x +":"+ gameToDraw.snake.y);
+	if(gameToDraw.isGameOver){
+		document.getElementById("gameover").style.display ="block"
+	}else{
+		document.getElementById("gameover").style.display ="none"
+	}
 
 	for (var i =  0; i < gameToDraw.snake.queue.length; i++) {
 
@@ -237,8 +239,6 @@ document.onkeydown = function(key){
 		case "ArrowDown":  game.snake.direction = 1; break;//down
 	}
 };
-
-game.start();
 
 //this is what permits the game to move at a framerate
 setInterval(function(){game.advanceFrame();}, 100);
